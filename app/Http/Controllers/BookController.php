@@ -94,7 +94,6 @@ class BookController extends Controller
                 }
             }
     
-            // Processa o upload da nova imagem
             $imageName = time() . '.' . $request->cover_image->extension();  
             $request->cover_image->move(public_path('images'), $imageName);
             $validatedData['cover_image'] = $imageName; // Salva o nome da nova imagem
@@ -113,22 +112,12 @@ class BookController extends Controller
     // Função para excluir um livro do banco de dados
     public function destroy($id)
     {
-        // Buscar o livro no banco de dados
+
         $book = Book::findOrFail($id);
-    
-        // Verificar se a imagem está associada ao livro
-        if ($book->image_path && file_exists(public_path('images/' . $book->image_path))) {
-            // Apagar a imagem do sistema de arquivos
-            unlink(public_path('images/' . $book->image_path));
-        }
-    
-        // Desassociar categorias (se existirem)
         $book->categories()->detach();
-    
-        // Apagar o registro do livro
         $book->delete();
-    
-        // Redirecionar com mensagem de sucesso
+
         return redirect()->route('books.index')->with('success', 'Livro excluído com sucesso!');
+        
     }
 }

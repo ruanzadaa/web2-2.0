@@ -3,7 +3,6 @@
 @section('content')
     <div class="container">
         <h1>Adicionar Novo Livro</h1>
-        <!-- Formulário único -->
         <form action="{{ route('books.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="mb-3">
