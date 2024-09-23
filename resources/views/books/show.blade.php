@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container">
-        <h1>{{ $book->title }}</h1>
+        <img src="{{ asset('images/' . $book->cover_image) }}" style="width: 200px; height: auto;">
         <p><strong>Autor:</strong> {{ $book->author->name }}</p>
         <p><strong>Editora:</strong> {{ $book->publisher->name }}</p>
         <p><strong>Ano de Publicação:</strong> {{ $book->published_year }}</p>

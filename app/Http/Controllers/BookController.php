@@ -35,21 +35,31 @@ class BookController extends Controller
 
     // Função para armazenar um novo livro no banco de dados
     public function store(Request $request)
-    {
-        $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
-            'author_id' => 'required|integer',
-            'publisher_id' => 'required|integer',
-            'published_year' => 'required|integer',
-            'categories' => 'required|array',
-        ]);
+{
+    $validatedData = $request->validate([
+        'title' => 'required|string|max:255',
+        'author_id' => 'required|integer',
+        'publisher_id' => 'required|integer',
+        'published_year' => 'required|integer',
+        'categories' => 'required|array',
+        'cover_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    ]);
 
-        $book = Book::create($validatedData);
-        $book->categories()->attach($request->categories);
-
-        return redirect()->route('books.index')->with('success', 'Livro criado com sucesso!');
+    // Processar o upload da imagem
+    if ($request->hasFile('cover_image')) {
+        $imageName = time() . '.' . $request->cover_image->extension();  
+        $request->cover_image->move(public_path('images'), $imageName);
+        
+        // Adicionar o nome da imagem ao validatedData
+        $validatedData['cover_image'] = $imageName; // Salvar o nome da imagem no array
     }
 
+    // Criar o livro no banco de dados
+    $book = Book::create($validatedData); // Isso agora incluirá 'cover_image'
+    $book->categories()->attach($request->categories);
+
+    return redirect()->route('books.index')->with('success', 'Livro criado com sucesso!');
+}
     // Função para exibir o formulário de edição de um livro
     public function edit($id)
     {
@@ -69,23 +79,56 @@ class BookController extends Controller
             'publisher_id' => 'required|integer',
             'published_year' => 'required|integer',
             'categories' => 'required|array',
+            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // 'nullable' permite que o campo seja opcional
         ]);
-
+    
         $book = Book::findOrFail($id);
+    
+        // Verifica se uma nova imagem foi enviada
+        if ($request->hasFile('cover_image')) {
+            // Remove a imagem antiga, se necessário
+            if ($book->cover_image) {
+                $oldImagePath = public_path('images/' . $book->cover_image);
+                if (file_exists($oldImagePath)) {
+                    unlink($oldImagePath); // Remove a imagem antiga
+                }
+            }
+    
+            // Processa o upload da nova imagem
+            $imageName = time() . '.' . $request->cover_image->extension();  
+            $request->cover_image->move(public_path('images'), $imageName);
+            $validatedData['cover_image'] = $imageName; // Salva o nome da nova imagem
+        } else {
+            // Se não houver nova imagem, mantém a imagem antiga
+            $validatedData['cover_image'] = $book->cover_image;
+        }
+    
+        // Atualiza os dados do livro
         $book->update($validatedData);
         $book->categories()->sync($request->categories);
-
+    
         return redirect()->route('books.index')->with('success', 'Livro atualizado com sucesso!');
     }
 
     // Função para excluir um livro do banco de dados
     public function destroy($id)
     {
+        // Buscar o livro no banco de dados
         $book = Book::findOrFail($id);
+    
+        // Verificar se a imagem está associada ao livro
+        if ($book->image_path && file_exists(public_path('images/' . $book->image_path))) {
+            // Apagar a imagem do sistema de arquivos
+            unlink(public_path('images/' . $book->image_path));
+        }
+    
+        // Desassociar categorias (se existirem)
         $book->categories()->detach();
+    
+        // Apagar o registro do livro
         $book->delete();
-
+    
+        // Redirecionar com mensagem de sucesso
         return redirect()->route('books.index')->with('success', 'Livro excluído com sucesso!');
     }
 }
-

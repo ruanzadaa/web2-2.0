@@ -3,9 +3,9 @@
 @section('content')
     <div class="container">
         <h1>Editar Livro</h1>
-        <form action="{{ route('books.update', $book->id) }}" method="POST">
+        <form action="{{ route('books.update', $book->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
-            @method('PUT')
+            @method('PUT') <!-- Adiciona o método PUT -->
             <div class="mb-3">
                 <label for="title" class="form-label">Título</label>
                 <input type="text" class="form-control" id="title" name="title" value="{{ old('title', $book->title) }}" required>
@@ -46,7 +46,22 @@
                     @endforeach
                 </select>
             </div>
-            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+
+            <!-- Exibe a imagem atual, se houver -->
+            @if ($book->cover_image)
+                <div class="mb-3">
+                    <label>Imagem Atual</label><br>
+                    <img src="{{ asset('images/' . $book->cover_image) }}" alt="Capa do Livro" style="width: 100px; height: auto;">
+                </div>
+            @endif
+
+            <!-- Campo de Upload da Nova Imagem -->
+            <div class="mb-3">
+                <label for="cover_image">Nova Imagem da Capa (opcional)</label>
+                <input type="file" name="cover_image" class="form-control">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Salvar</button>
             <a href="{{ route('books.index') }}" class="btn btn-secondary">Cancelar</a>
         </form>
     </div>
