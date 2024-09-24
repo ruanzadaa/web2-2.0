@@ -3,9 +3,17 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Models\Book;
+use App\Policies\BookPolicy;
+
 
 class AppServiceProvider extends ServiceProvider
 {
+    protected $policies = [
+        \App\Models\Book::class => \App\Policies\BookPolicy::class,
+        \App\Models\User::class => \App\Policies\UserPolicy::class,
+
+    ];
     /**
      * Register any application services.
      */
@@ -19,6 +27,5 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
     }
 }

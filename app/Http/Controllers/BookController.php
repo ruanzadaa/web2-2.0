@@ -13,6 +13,8 @@ class BookController extends Controller
     // Função para exibir uma lista de livros
     public function index()
     {
+        $books = Book::all();
+
         $books = Book::with(['author', 'publisher', 'categories'])->get();
         return view('books.index', compact('books'));
     }
@@ -27,33 +29,39 @@ class BookController extends Controller
     // Função para exibir o formulário de criação de um novo livro
     public function create()
     {
+
+        
         $authors = Author::all();
         $publishers = Publisher::all();
         $categories = Category::all();
         return view('books.create', compact('authors', 'publishers', 'categories'));
     }
-
+    
     // Função para armazenar um novo livro no banco de dados
     public function store(Request $request)
-{
-    $validatedData = $request->validate([
-        'title' => 'required|string|max:255',
-        'author_id' => 'required|integer',
-        'publisher_id' => 'required|integer',
-        'published_year' => 'required|integer',
-        'categories' => 'required|array',
-        'cover_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-    ]);
+    {
 
-    // Processar o upload da imagem
-    if ($request->hasFile('cover_image')) {
-        $imageName = time() . '.' . $request->cover_image->extension();  
-        $request->cover_image->move(public_path('images'), $imageName);
+        $this->authorize('create', Book::class);
+
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'author_id' => 'required|integer',
+            'publisher_id' => 'required|integer',
+            'published_year' => 'required|integer',
+            'categories' => 'required|array',
+            'cover_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
         
-        // Adicionar o nome da imagem ao validatedData
-        $validatedData['cover_image'] = $imageName; // Salvar o nome da imagem no array
-    }
-
+        // Processar o upload da imagem
+        if ($request->hasFile('cover_image')) {
+            $imageName = time() . '.' . $request->cover_image->extension();  
+            $request->cover_image->move(public_path('images'), $imageName);
+            
+            // Adicionar o nome da imagem ao validatedData
+            $validatedData['cover_image'] = $imageName; // Salvar o nome da imagem no array
+        }
+        
+      
     // Criar o livro no banco de dados
     $book = Book::create($validatedData); // Isso agora incluirá 'cover_image'
     $book->categories()->attach($request->categories);
@@ -67,6 +75,8 @@ class BookController extends Controller
         $authors = Author::all();
         $publishers = Publisher::all();
         $categories = Category::all();
+
+        $this->authorize('update', $book);
         return view('books.edit', compact('book', 'authors', 'publishers', 'categories'));
     }
 
@@ -103,6 +113,7 @@ class BookController extends Controller
         }
     
         // Atualiza os dados do livro
+        $this->authorize('update', $book);
         $book->update($validatedData);
         $book->categories()->sync($request->categories);
     
@@ -115,6 +126,7 @@ class BookController extends Controller
 
         $book = Book::findOrFail($id);
         $book->categories()->detach();
+        $this->authorize('delete', $book);
         $book->delete();
 
         return redirect()->route('books.index')->with('success', 'Livro excluído com sucesso!');

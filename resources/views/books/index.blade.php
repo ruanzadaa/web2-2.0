@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+
 @section('content')
     <div class="container">
         <h1>Lista de Livros</h1>
@@ -42,5 +43,6 @@
         @endforeach
     </tbody>
 </table>
+<a href="{{ route('users.index') }}" class="btn btn-primary">Ver Usuários</a>
     </div>
 @endsection
