@@ -29,6 +29,7 @@ class BookController extends Controller
     // Função para exibir o formulário de criação de um novo livro
     public function create()
     {
+        $this->authorize('create', Book::class);
 
         
         $authors = Author::all();

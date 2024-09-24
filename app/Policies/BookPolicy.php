@@ -13,7 +13,7 @@ class BookPolicy
         return $user->role === 'admin' || $user->role === 'bibliotecario';
     }
 
-    public function update(User $user, Book $book)
+    public function update(User $user)
     {
         return $user->role === 'admin' || $user->role === 'bibliotecario';
     }
@@ -21,5 +21,10 @@ class BookPolicy
     public function delete(User $user, Book $book)
     {
         return $user->role === 'admin' || $user->role === 'bibliotecario';
+    }
+
+    public function up(User $user)
+    {
+        return $user->role === 'admin';
     }
 }

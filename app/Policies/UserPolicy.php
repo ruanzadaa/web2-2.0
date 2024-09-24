@@ -27,4 +27,8 @@ class UserPolicy
         return $user->role === 'admin' || $user->role === 'bibliotecario';
     }
 
+    public function authorizeAdmin(User $user){
+        return $user->role === 'admin';
+    }
+
 }
