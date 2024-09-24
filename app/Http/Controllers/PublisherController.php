@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Publisher;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class PublisherController extends Controller
 {
@@ -24,6 +25,8 @@ class PublisherController extends Controller
     // Função para exibir o formulário de criação de uma nova editora
     public function create()
     {
+        $this->authorize('authorizeAll', User::class);
+
         return view('publishers.create');
     }
 
@@ -44,6 +47,7 @@ class PublisherController extends Controller
     public function edit($id)
     {
         $publisher = Publisher::findOrFail($id);
+        $this->authorize('authorizeAll', User::class);
         return view('publishers.edit', compact('publisher'));
     }
 
@@ -58,6 +62,8 @@ class PublisherController extends Controller
         $publisher = Publisher::findOrFail($id);
         $publisher->update($validatedData);
 
+        $this->authorize('authorizeAll', User::class);
+
         return redirect()->route('publishers.index')->with('success', 'Editora atualizada com sucesso!');
     }
 
@@ -66,6 +72,8 @@ class PublisherController extends Controller
     {
         $publisher = Publisher::findOrFail($id);
         $publisher->delete();
+
+        $this->authorize('authorizeAll', User::class);
 
         return redirect()->route('publishers.index')->with('success', 'Editora excluída com sucesso!');
     }

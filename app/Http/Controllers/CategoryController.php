@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class CategoryController extends Controller
 {
@@ -24,6 +25,8 @@ class CategoryController extends Controller
     // Função para exibir o formulário de criação de uma nova categoria
     public function create()
     {
+        $this->authorize('authorizeAll', User::class);
+
         return view('categories.create');
     }
 
@@ -43,6 +46,7 @@ class CategoryController extends Controller
     public function edit($id)
     {
         $category = Category::findOrFail($id);
+        $this->authorize('authorizeAll', User::class);
         return view('categories.edit', compact('category'));
     }
 
@@ -55,7 +59,7 @@ class CategoryController extends Controller
 
         $category = Category::findOrFail($id);
         $category->update($validatedData);
-
+        $this->authorize('authorizeAll', User::class);
         return redirect()->route('categories.index')->with('success', 'Categoria atualizada com sucesso!');
     }
 
@@ -64,6 +68,7 @@ class CategoryController extends Controller
     {
         $category = Category::findOrFail($id);
         $category->books()->detach();
+        $this->authorize('authorizeAll', User::class);
         $category->delete();
 
         return redirect()->route('categories.index')->with('success', 'Categoria excluída com sucesso!');

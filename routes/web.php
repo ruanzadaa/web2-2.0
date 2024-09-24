@@ -20,19 +20,11 @@ Route::resource('categories', CategoryController::class);
 Route::resource('publishers', PublisherController::class);
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth/login');
 });
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('/books', [BookController::class, 'index'])->name('books.index');
-Route::get('/books/create', [BookController::class, 'create'])->name('books.create'); // Formulário de criação
-Route::post('/books', [BookController::class, 'store'])->name('books.store');
-Route::get('/books/{book}', [BookController::class, 'show'])->name('books.show'); // Ver
-Route::get('/books/{book}/edit', [BookController::class, 'edit'])->name('books.edit'); // Editar
-Route::put('/books/{book}', [BookController::class, 'update'])->name('books.update'); // Atualizar
-Route::delete('/books/{book}', [BookController::class, 'destroy'])->name('books.destroy'); // Excluir
 
 // routes/web.php
 
@@ -47,8 +39,6 @@ Route::post('/users/{id}/updatePrivilege', [UserController::class, 'updatePrivil
 
 Route::get('/users', [UserController::class, 'index'])->name('users.index');
 
-Route::middleware('admin')->get('/test-admin', function () {
-    return 'Acesso permitido para admin!';
-});
+
 
 

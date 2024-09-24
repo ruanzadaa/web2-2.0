@@ -22,4 +22,9 @@ class UserPolicy
     {
         return $user->role === 'admin'; // Apenas administradores podem alterar privilégios
     }
+
+    public function authorizeAll(User $user){
+        return $user->role === 'admin' || $user->role === 'bibliotecario';
+    }
+
 }

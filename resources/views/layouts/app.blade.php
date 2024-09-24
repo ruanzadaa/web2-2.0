@@ -19,13 +19,68 @@
 <body>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+    <div class="container">
+        <a class="navbar-brand" href="{{ url('/') }}">
+            {{ config('app.name', 'Laravel') }}
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <!-- Left Side Of Navbar -->
+            <ul class="navbar-nav me-auto">
+                @auth
+                <!-- Dropdown para Books -->
+                <li class="nav-item dropdown">
+                    <a id="booksDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Livros
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="booksDropdown">
+                        <a class="dropdown-item" href="{{ route('books.index') }}">Listar Livros</a>
+                        <a class="dropdown-item" href="{{ route('books.create') }}">Adicionar Livro</a>
+                    </div>
+                </li>
+                @endauth
+                @auth
+                <!-- Dropdown para Authors -->
+                <li class="nav-item dropdown">
+                    <a id="authorsDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Autores
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="authorsDropdown">
+                        <a class="dropdown-item" href="{{ route('authors.index') }}">Listar Autores</a>
+                        <a class="dropdown-item" href="{{ route('authors.create') }}">Adicionar Autor</a>
+                    </div>
+                </li>
+                @endauth
+                @auth
+                <!-- Dropdown para Categories -->
+                <li class="nav-item dropdown">
+                    <a id="categoriesDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Categorias
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="categoriesDropdown">
+                        <a class="dropdown-item" href="{{ route('categories.index') }}">Listar Categorias</a>
+                        <a class="dropdown-item" href="{{ route('categories.create') }}">Adicionar Categoria</a>
+                    </div>
+                </li>
+                @endauth
+                @auth
+                <!-- Dropdown para Publishers -->
+                <li class="nav-item dropdown">
+                    <a id="publishersDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Editoras
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="publishersDropdown">
+                        <a class="dropdown-item" href="{{ route('publishers.index') }}">Listar Editoras</a>
+                        <a class="dropdown-item" href="{{ route('publishers.create') }}">Adicionar Editora</a>
+                    </div>
+                </li>
+            </ul>
+            @endauth
+
+
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->

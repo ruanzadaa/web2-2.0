@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Author;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class AuthorController extends Controller
 {
@@ -24,6 +25,8 @@ class AuthorController extends Controller
     // Função para exibir o formulário de criação de um novo autor
     public function create()
     {
+        $this->authorize('authorizeAll', User::class);
+
         return view('authors.create');
     }
 
@@ -44,6 +47,7 @@ class AuthorController extends Controller
     public function edit($id)
     {
         $author = Author::findOrFail($id);
+        $this->authorize('authorizeAll', User::class);
         return view('authors.edit', compact('author'));
     }
 
@@ -58,6 +62,8 @@ class AuthorController extends Controller
         $author = Author::findOrFail($id);
         $author->update($validatedData);
 
+        $this->authorize('authorizeAll', User::class);
+
         return redirect()->route('authors.index')->with('success', 'Autor atualizado com sucesso!');
     }
 
@@ -65,6 +71,7 @@ class AuthorController extends Controller
     public function destroy($id)
     {
         $author = Author::findOrFail($id);
+        $this->authorize('authirizeAll', User::class);
         $author->delete();
 
         return redirect()->route('authors.index')->with('success', 'Autor excluído com sucesso!');

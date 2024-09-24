@@ -2,6 +2,7 @@
 
 
 @section('content')
+
     <div class="container">
         <h1>Lista de Livros</h1>
         <a href="{{ route('books.create') }}" class="btn btn-primary mb-3">Adicionar Novo Livro</a>
