@@ -38,7 +38,9 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="booksDropdown">
                         <a class="dropdown-item" href="{{ route('books.index') }}">Listar Livros</a>
+                        @can('update', App\Models\Book::class)
                         <a class="dropdown-item" href="{{ route('books.create') }}">Adicionar Livro</a>
+                        @endcan
                     </div>
                 </li>
                 @endauth
@@ -50,7 +52,9 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="authorsDropdown">
                         <a class="dropdown-item" href="{{ route('authors.index') }}">Listar Autores</a>
+                        @can('update', App\Models\Book::class)
                         <a class="dropdown-item" href="{{ route('authors.create') }}">Adicionar Autor</a>
+                        @endcan
                     </div>
                 </li>
                 @endauth
@@ -62,7 +66,9 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="categoriesDropdown">
                         <a class="dropdown-item" href="{{ route('categories.index') }}">Listar Categorias</a>
+                        @can('update', App\Models\Book::class)
                         <a class="dropdown-item" href="{{ route('categories.create') }}">Adicionar Categoria</a>
+                        @endcan
                     </div>
                 </li>
                 @endauth
@@ -74,7 +80,9 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="publishersDropdown">
                         <a class="dropdown-item" href="{{ route('publishers.index') }}">Listar Editoras</a>
+                        @can('update', App\Models\Book::class)
                         <a class="dropdown-item" href="{{ route('publishers.create') }}">Adicionar Editora</a>
+                        @endcan
                     </div>
                 </li>
             </ul>
