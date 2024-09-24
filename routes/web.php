@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PublisherController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CommentController;
 
 
 // Rotas para Books
@@ -40,5 +41,6 @@ Route::post('/users/{id}/updatePrivilege', [UserController::class, 'updatePrivil
 Route::get('/users', [UserController::class, 'index'])->name('users.index');
 
 
-
+Route::get('/books/{book_id}/comments', [CommentController::class, 'index'])->name('comments.index');
+Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
 

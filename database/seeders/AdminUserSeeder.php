@@ -13,8 +13,8 @@ class AdminUserSeeder extends Seeder
         User::create([
             'name' => 'Admin',
             'email' => 'admin@example.com',
-            'password' => Hash::make('password'), // Substitua pela senha desejada
-            'role' => 'admin', // Definindo o papel como 'admin'
+            'password' => Hash::make('password'),
+            'role' => 'admin',
         ]);
     }
 }

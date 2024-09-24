@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Book extends Model
 {
+    use HasFactory;
+    
     // Campos que podem ser atribuídos em massa
     protected $fillable = ['title', 'author_id', 'publisher_id', 'published_year', 'cover_image'];
 
@@ -25,6 +28,11 @@ class Book extends Model
     public function categories()
     {
         return $this->belongsToMany(Category::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 }
 
